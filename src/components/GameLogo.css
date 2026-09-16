@@ -1,0 +1,20 @@
+.topbar {
+  height: max(78px, calc(66px + env(safe-area-inset-top)));
+  padding-block: max(12px, env(safe-area-inset-top));
+}
+.game-logo { align-items:center; display:inline-flex; flex:0 1 clamp(126px,20vw,236px); justify-content:center; max-width:42vw; min-width:0; }
+.game-logo__asset { display:block; height:auto; max-height:clamp(38px,7vw,60px); max-width:100%; object-fit:contain; user-select:none; }
+.game-logo__fallback { color:#278f85; display:grid; filter:drop-shadow(0 2px 0 #fff) drop-shadow(0 4px 5px #43817d40); font-family:'Baloo 2','Arial Rounded MT Bold',system-ui,sans-serif; font-weight:800; justify-items:center; line-height:.76; text-align:center; text-wrap:nowrap; }
+.game-logo__fallback small { color:#edac43; font-size:clamp(.55rem,1.2vw,.75rem); letter-spacing:.18em; margin-left:.18em; }
+.game-logo__fallback strong { -webkit-text-stroke:1px #197a73; color:#42b9a2; font-size:clamp(1.05rem,2.35vw,1.75rem); letter-spacing:-.04em; }
+.game-logo--compact { flex-basis:clamp(52px,8vw,72px); }.game-logo--compact .game-logo__asset { max-height:56px; }
+@media(max-width:800px) { .topbar { height:max(67px,calc(54px + env(safe-area-inset-top))); padding-block:max(9px,env(safe-area-inset-top)); } }
+@media(max-width:520px) { .game-logo { flex-basis:clamp(108px,38vw,152px); max-width:44vw; }.game-logo__asset { max-height:41px; } }
+@media(min-width:900px) { .game-logo__asset { max-height:64px; } }
+
+/* The market-scene treatment masks the source canvas so only the round badge reads as the logo. */
+.market-logo { bottom:20px; position:absolute; right:14px; width:clamp(112px,15vw,170px); z-index:2; }
+.market-logo .game-logo { display:block; max-width:none; width:100%; }
+.market-logo .game-logo__asset { clip-path:circle(47% at 50% 50%); display:block; max-height:none; width:100%; }
+.market-logo > span { background:#fff; border-radius:14px; bottom:5%; box-shadow:0 3px 0 #d9e5db; color:#397c62; font-size:clamp(9px,1vw,12px); font-weight:900; left:50%; padding:5px 8px; position:absolute; transform:translateX(-50%); white-space:nowrap; }
+@media(max-width:800px) { .market-logo { bottom:12px; right:8px; width:clamp(90px,26vw,128px); }.market-logo > span { display:none; } }
