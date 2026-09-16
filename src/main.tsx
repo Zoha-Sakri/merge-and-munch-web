@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
 import { GameLogo } from './components/GameLogo'
+import { readVersioned, writeSaved } from './storage'
 
 type Screen = 'home' | 'game' | 'shop' | 'achievements' | 'settings'
 type Tile = { id: number; chain: string; stage: number; locked?: boolean; ice?: boolean } | null
@@ -36,10 +37,10 @@ const createAchievements = () => Array.from({ length: 120 }, (_, index) => ({ ti
 
 function App() {
   const [screen, setScreen] = useState<Screen>('home')
-  const [board, setBoard] = useState<Tile[]>(() => JSON.parse(localStorage.getItem('tmm-board') || 'null') || initialBoard())
+  const [board, setBoard] = useState<Tile[]>(() => readVersioned('tmm-board', initialBoard()))
   const [selected, setSelected] = useState<number | null>(null)
-  const [coins, setCoins] = useState(() => Number(localStorage.getItem('tmm-coins') || 1240))
-  const [stars, setStars] = useState(() => Number(localStorage.getItem('tmm-stars') || 18))
+  const [coins, setCoins] = useState(() => readVersioned('tmm-coins', 1240))
+  const [stars, setStars] = useState(() => readVersioned('tmm-stars', 18))
   const [energy, setEnergy] = useState(5)
   const [toast, setToast] = useState('')
   const [combo, setCombo] = useState(0)
@@ -47,11 +48,11 @@ function App() {
   const [settings, setSettings] = useState({ sound: true, music: true, motion: true, contrast: false })
   const [claimed, setClaimed] = useState(false)
   const [theme, setTheme] = useState('Sunny Farm')
-  const [buildings, setBuildings] = useState<CityBuilding[]>(() => JSON.parse(localStorage.getItem('tmm-buildings') || 'null') || [{ name: 'Community Hall', icon: '🏛️', level: 1, cost: 260, detail: 'A place for neighbors to gather' }, { name: 'Harvest Cafe', icon: '🍽️', level: 1, cost: 340, detail: 'Serve recipes to hungry citizens' }, { name: 'Sky Garden', icon: '🏰', level: 0, cost: 520, detail: 'A wonder for the whole valley' }])
-  const [animals, setAnimals] = useState<FarmAnimal[]>(() => JSON.parse(localStorage.getItem('tmm-animals') || 'null') || [{ name: 'Clover', icon: '🐄', product: 'Fresh milk', ready: true }, { name: 'Hazel', icon: '🐔', product: 'Golden eggs', ready: true }, { name: 'Bramble', icon: '🐑', product: 'Soft wool', ready: true }])
-  const [tunnel, setTunnel] = useState<{ unlocked: boolean; depth: number }>(() => JSON.parse(localStorage.getItem('tmm-tunnel') || 'null') || { unlocked: false, depth: 0 })
+  const [buildings, setBuildings] = useState<CityBuilding[]>(() => readVersioned('tmm-buildings', [{ name: 'Community Hall', icon: '🏛️', level: 1, cost: 260, detail: 'A place for neighbors to gather' }, { name: 'Harvest Cafe', icon: '🍽️', level: 1, cost: 340, detail: 'Serve recipes to hungry citizens' }, { name: 'Sky Garden', icon: '🏰', level: 0, cost: 520, detail: 'A wonder for the whole valley' }]))
+  const [animals, setAnimals] = useState<FarmAnimal[]>(() => readVersioned('tmm-animals', [{ name: 'Clover', icon: '🐄', product: 'Fresh milk', ready: true }, { name: 'Hazel', icon: '🐔', product: 'Golden eggs', ready: true }, { name: 'Bramble', icon: '🐑', product: 'Soft wool', ready: true }]))
+  const [tunnel, setTunnel] = useState<{ unlocked: boolean; depth: number }>(() => readVersioned('tmm-tunnel', { unlocked: false, depth: 0 }))
 
-  useEffect(() => { localStorage.setItem('tmm-board', JSON.stringify(board)); localStorage.setItem('tmm-coins', String(coins)); localStorage.setItem('tmm-stars', String(stars)); localStorage.setItem('tmm-buildings', JSON.stringify(buildings)); localStorage.setItem('tmm-animals', JSON.stringify(animals)); localStorage.setItem('tmm-tunnel', JSON.stringify(tunnel)) }, [board, coins, stars, buildings, animals, tunnel])
+  useEffect(() => { writeSaved('tmm-board', board); writeSaved('tmm-coins', coins); writeSaved('tmm-stars', stars); writeSaved('tmm-buildings', buildings); writeSaved('tmm-animals', animals); writeSaved('tmm-tunnel', tunnel) }, [board, coins, stars, buildings, animals, tunnel])
   useEffect(() => { if (!toast) return; const t = window.setTimeout(() => setToast(''), 1600); return () => clearTimeout(t) }, [toast])
 
   const mergeAt = (from: number, to: number) => {
