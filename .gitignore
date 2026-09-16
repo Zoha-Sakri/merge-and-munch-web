@@ -3,7 +3,29 @@ dist/
 .DS_Store
 *.local
 *.tsbuildinfo
-coverage/
-.env
-.env.*
+vite.config.js
+vite.config.d.ts
+
+# Android / Gradle
+.gradle/
+build/
+**/build/
+local.properties
+.idea/
+*.iml
+captures/
+
+# iOS / Xcode
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+
+# Signing and local secrets
+*.p12
+*.mobileprovision
+*.cer
+*.key
 !.env.example

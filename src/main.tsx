@@ -47,11 +47,11 @@ function App() {
   const [settings, setSettings] = useState({ sound: true, music: true, motion: true, contrast: false })
   const [claimed, setClaimed] = useState(false)
   const [theme, setTheme] = useState('Sunny Farm')
-  const [buildings, setBuildings] = useState<CityBuilding[]>([{ name: 'Community Hall', icon: '🏛️', level: 1, cost: 260, detail: 'A place for neighbors to gather' }, { name: 'Harvest Cafe', icon: '🍽️', level: 1, cost: 340, detail: 'Serve recipes to hungry citizens' }, { name: 'Sky Garden', icon: '🏰', level: 0, cost: 520, detail: 'A wonder for the whole valley' }])
-  const [animals, setAnimals] = useState<FarmAnimal[]>([{ name: 'Clover', icon: '🐄', product: 'Fresh milk', ready: true }, { name: 'Hazel', icon: '🐔', product: 'Golden eggs', ready: true }, { name: 'Bramble', icon: '🐑', product: 'Soft wool', ready: true }])
-  const [tunnel, setTunnel] = useState({ unlocked: false, depth: 0 })
+  const [buildings, setBuildings] = useState<CityBuilding[]>(() => JSON.parse(localStorage.getItem('tmm-buildings') || 'null') || [{ name: 'Community Hall', icon: '🏛️', level: 1, cost: 260, detail: 'A place for neighbors to gather' }, { name: 'Harvest Cafe', icon: '🍽️', level: 1, cost: 340, detail: 'Serve recipes to hungry citizens' }, { name: 'Sky Garden', icon: '🏰', level: 0, cost: 520, detail: 'A wonder for the whole valley' }])
+  const [animals, setAnimals] = useState<FarmAnimal[]>(() => JSON.parse(localStorage.getItem('tmm-animals') || 'null') || [{ name: 'Clover', icon: '🐄', product: 'Fresh milk', ready: true }, { name: 'Hazel', icon: '🐔', product: 'Golden eggs', ready: true }, { name: 'Bramble', icon: '🐑', product: 'Soft wool', ready: true }])
+  const [tunnel, setTunnel] = useState<{ unlocked: boolean; depth: number }>(() => JSON.parse(localStorage.getItem('tmm-tunnel') || 'null') || { unlocked: false, depth: 0 })
 
-  useEffect(() => { localStorage.setItem('tmm-board', JSON.stringify(board)); localStorage.setItem('tmm-coins', String(coins)); localStorage.setItem('tmm-stars', String(stars)) }, [board, coins, stars])
+  useEffect(() => { localStorage.setItem('tmm-board', JSON.stringify(board)); localStorage.setItem('tmm-coins', String(coins)); localStorage.setItem('tmm-stars', String(stars)); localStorage.setItem('tmm-buildings', JSON.stringify(buildings)); localStorage.setItem('tmm-animals', JSON.stringify(animals)); localStorage.setItem('tmm-tunnel', JSON.stringify(tunnel)) }, [board, coins, stars, buildings, animals, tunnel])
   useEffect(() => { if (!toast) return; const t = window.setTimeout(() => setToast(''), 1600); return () => clearTimeout(t) }, [toast])
 
   const mergeAt = (from: number, to: number) => {
